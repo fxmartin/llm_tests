@@ -1,8 +1,11 @@
-import requests
 import logging
+import time
+import requests
 from dotenv import load_dotenv
 import os
 import ollama
+import colorama
+import json
 
 # Structured list of prompts tailored for a comprehensive evaluation of LLMs
 # Where each capability has a list of related questions
@@ -25,6 +28,41 @@ questionnaire = {
     ]
 }
 
+# Initialize colorama
+colorama.init(autoreset=True)
+
+load_dotenv() # Load environment variables from .env file
+
+# Get logging level from .env, default to WARNING if not set
+log_level = os.getenv("LOG_LEVEL", "WARNING").upper()
+
+# Convert string to logging level
+log_level_mapping = {
+    "DEBUG": logging.DEBUG,
+    "INFO": logging.INFO,
+    "WARNING": logging.WARNING,
+    "ERROR": logging.ERROR,
+    "CRITICAL": logging.CRITICAL
+}
+
+logging_level = log_level_mapping.get(log_level, logging.WARNING)
+
+# Configure logging
+logging.basicConfig(
+    level=logging_level,
+    format="%(asctime)s - %(levelname)s - %(message)s")
+    
+# Retrieve the .env variables
+logging.info(colorama.Fore.GREEN + "Loading the .env variables")
+logging.info(colorama.Fore.GREEN + "\tLOG_LEVEL = " + log_level)
+reasoning_model_id = os.getenv("REASONING_MODEL_ID")
+logging.info(colorama.Fore.GREEN + "\tREASONING_MODEL_ID = " + reasoning_model_id)
+ollama_call_framework = os.getenv("OLLAMA_CALL_FRAMEWORK")
+logging.info(colorama.Fore.GREEN + "\tOLLAMA_CALL_FRAMEWORK = " + ollama_call_framework)
+ollama_api_url = os.getenv("OLLAMA_API_URL")
+logging.info(colorama.Fore.GREEN + "\tOLLAMA_API_URL = " + ollama_api_url)
+
+
 def query_ollama(model: str, prompt: str, temperature: float = 0.7, api_url: str = "http://localhost:11434/api/generate"):
     # Sends a prompt to Ollama's API and returns the response.
 
@@ -43,11 +81,11 @@ def query_ollama(model: str, prompt: str, temperature: float = 0.7, api_url: str
     }
 
     try:
-        logging.info("Calling Ollama with the following parameters:")
-        logging.info("\tModel: " + model)
-        logging.info("\tTemperature: " + temperature)
-        logging.info("\tPrompt: " + prompt)
-        logging.info("\tAPI Url: " + api_url)
+        logging.info(colorama.Fore.GREEN + "Calling Ollama with the following parameters:")
+        logging.info(colorama.Fore.GREEN + "\tModel: " + model)
+        logging.info(colorama.Fore.GREEN + "\tTemperature: " + temperature)
+        logging.info(colorama.Fore.GREEN + "\tPrompt: " + prompt)
+        logging.info(colorama.Fore.GREEN + "\tAPI Url: " + api_url)
         response = requests.post(api_url, json=payload)
         
         data = response.json()
@@ -58,60 +96,42 @@ def query_ollama(model: str, prompt: str, temperature: float = 0.7, api_url: str
         # total_time_ms = total_time_ns / 1_000_000  # Convert to milliseconds
         total_time_s = total_time_ns / 1_000_000_000  # Convert to seconds
 
-        logging.info(f"Tokens Evaluated: {tokens_evaluated}")
-        logging.info(f"Total Execution Time: {total_time_s:.2f} s")  # Display 2 decimal places
+        logging.info(colorama.Fore.GREEN + f"Tokens Evaluated: {tokens_evaluated}")
+        logging.info(colorama.Fore.GREEN + f"Total Execution Time: {total_time_s:.2f} s")  # Display 2 decimal places
         
         response.raise_for_status()
         return response.json().get("response", "No response from Ollama").strip()
         
     except requests.exceptions.RequestException as e:
-        logging.error("Error connecting to Ollama API")
+        logging.error(colorama.Fore.RED + "Error connecting to Ollama API")
         return f"Error connecting to Ollama API: {e}"
-    
+
+def list_models():
+    try:
+        # Fetch the list of available models
+        models_data = ollama.list()
+
+        # Extract and display model names
+        if "models" in models_data:
+            model_names = [model["model"] for model in models_data["models"]]
+            print("Available Ollama Models:")
+            for name in model_names:
+                print("-", name)
+            return model_names
+        else:
+            print("No models found.")
+            return None
+
+    except Exception as e:
+        logging.error(colorama.Fore.RED + "Error retrieving models:" + str(e))
+
 if __name__ == "__main__":
-    load_dotenv() # Load environment variables from .env file
 
-    # Get logging level from .env, default to WARNING if not set
-    log_level = os.getenv("LOG_LEVEL", "WARNING").upper()
-
-    # Convert string to logging level
-    log_level_mapping = {
-        "DEBUG": logging.DEBUG,
-        "INFO": logging.INFO,
-        "WARNING": logging.WARNING,
-        "ERROR": logging.ERROR,
-        "CRITICAL": logging.CRITICAL
-    }
-    logging_level = log_level_mapping.get(log_level, logging.WARNING)
-
-    # Configure logging
-    logging.basicConfig(
-        level=logging_level,
-        format="%(asctime)s - %(levelname)s - %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S"
-    )
-
-    # Retrieve the .env variables
-    logging.debug("Loading the .env variables")
-    reasoning_model_id = os.getenv("REASONING_MODEL_ID")
-    logging.debug("REASONING_MODEL_ID = " + reasoning_model_id)
-    ollama_api_url = os.getenv("OLLAMA_API_URL")
-    logging.debug("OLLAMA_API_URL = " + ollama_api_url)
-    
     # Display the qestionnaire
-    for capability, questions in questionnaire.items():
-        print(f"Capability: {capability}")
-        for question in questions:
-            print(f"  - {question}")
-        print()
-    
-    # Fetch the list of available models
-    models = ollama.list()
-    
-    # Extract model names
-    models_list = [model['model'] for model in models['models']]
-
-    # Print the list of models
-    print("Available Local Models in Ollama:")
-    for model in models_list:
-        print(f"- {model}")
+    # for capability, questions in questionnaire.items():
+    #    print(f"Capability: {capability}")
+    #    for question in questions:
+    #        print(f"  - {question}")
+    #    print()
+        
+    list_models()
