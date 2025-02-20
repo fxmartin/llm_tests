@@ -201,10 +201,10 @@ if __name__ == "__main__":
         If the original text is very brief (only a couple of lines), refine it without
         overcomplicating—keep it succinct while ensuring it remains polished and professional.
         Text to rewrite:
-        Hey, we’ve been reviewing the project timeline, and I don’t think we can meet the
-        original deadline. The integration is taking longer than expected, and we’ve run
-        into some unforeseen technical issues. I know this isn’t ideal, but we might need
-        more time. Maybe we can extend the deadline by two weeks? Let me know if that’s
+        Hey, we've been reviewing the project timeline, and I don't think we can meet the
+        original deadline. The integration is taking longer than expected, and we've run
+        into some unforeseen technical issues. I know this isn't ideal, but we might need
+        more time. Maybe we can extend the deadline by two weeks? Let me know if that's
         possible. Thanks.
     """
     
