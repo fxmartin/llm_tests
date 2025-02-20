@@ -62,8 +62,7 @@ logging.info(colorama.Fore.GREEN + "\tOLLAMA_CALL_FRAMEWORK = " + ollama_call_fr
 ollama_api_url = os.getenv("OLLAMA_API_URL")
 logging.info(colorama.Fore.GREEN + "\tOLLAMA_API_URL = " + ollama_api_url)
 
-
-def query_ollama(model: str, prompt: str, temperature: float = 0.7, api_url: str = "http://localhost:11434/api/generate"):
+def query_ollama_api(model: str, prompt: str, temperature: float = 0.7, api_url: str = "http://localhost:11434/api/generate"):
     # Sends a prompt to Ollama's API and returns the response.
 
     # :param model: The name of the model to use (e.g., 'mistral', 'gemma', etc.).
@@ -114,9 +113,6 @@ def list_models():
         # Extract and display model names
         if "models" in models_data:
             model_names = [model["model"] for model in models_data["models"]]
-            print("Available Ollama Models:")
-            for name in model_names:
-                print("-", name)
             return model_names
         else:
             print("No models found.")
@@ -124,6 +120,47 @@ def list_models():
 
     except Exception as e:
         logging.error(colorama.Fore.RED + "Error retrieving models:" + str(e))
+
+def query_ollama_library(model: str, prompt: str, temperature: float = 0.7):
+    # Sends a prompt via ollama python library and returns the response.
+
+    # :param model: The name of the model to use (e.g., 'mistral', 'gemma', etc.).
+    # :param prompt: The text prompt to send to the model.
+    # :param temperature: Controls randomness (lower = more deterministic).
+    # :param api_url: The URL of the Ollama API endpoint (default: localhost).
+
+    # :return: The generated response from the model.
+
+    try:
+        logging.info(colorama.Fore.GREEN + "Calling Ollama with the following parameters:")
+        logging.info(colorama.Fore.GREEN + "\tModel: " + model)
+        logging.info(colorama.Fore.GREEN + "\tTemperature: " + str(temperature))
+        logging.info(colorama.Fore.GREEN + "\tPrompt: " + prompt)
+        response = ollama.generate(
+            model=model,
+            prompt=prompt,
+            options={
+                "temperature": temperature,  # Controls randomness (0 = deterministic, 1 = max randomness)
+                "top_k": 50,         # Limits sampling to top-K most likely tokens
+                "top_p": 0.9,        # Nucleus sampling (alternative to top_k)
+                "num_predict": 50     # Maximum number of tokens to generate
+            },
+            stream=False
+        )
+    
+        # Extract and convert execution time
+        tokens_evaluated = str(response['eval_count'])
+        total_time_ns = response['total_duration']
+        total_time_s = total_time_ns / 1_000_000_000  # Convert to seconds
+
+        logging.info(colorama.Fore.GREEN + f"Tokens Evaluated: {tokens_evaluated}")
+        logging.info(colorama.Fore.GREEN + f"Total Execution Time: {total_time_s:.2f} s")  # Display 2 decimal places
+
+        return response['response']
+    
+    except requests.exceptions.RequestException as e:
+        logging.error(colorama.Fore.RED + "Error calling Ollama")
+        return f"Error calling Ollama: {e}"
 
 if __name__ == "__main__":
 
@@ -133,5 +170,12 @@ if __name__ == "__main__":
     #    for question in questions:
     #        print(f"  - {question}")
     #    print()
-        
-    list_models()
+    
+    for model in list_models():
+        print(model)
+        print(query_ollama_library(
+            model=model,
+            prompt='What is the capital of France?',
+        ))
+    
+    
