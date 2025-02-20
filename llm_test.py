@@ -53,14 +53,14 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s")
     
 # Retrieve the .env variables
-logging.info(colorama.Fore.GREEN + "Loading the .env variables")
-logging.info(colorama.Fore.GREEN + "\tLOG_LEVEL = " + log_level)
+logging.debug(colorama.Fore.MAGENTA + "Loading the .env variables")
+logging.debug(colorama.Fore.MAGENTA + "\tLOG_LEVEL = " + log_level)
 reasoning_model_id = os.getenv("REASONING_MODEL_ID")
-logging.info(colorama.Fore.GREEN + "\tREASONING_MODEL_ID = " + reasoning_model_id)
+logging.debug(colorama.Fore.MAGENTA + "\tREASONING_MODEL_ID = " + reasoning_model_id)
 ollama_call_framework = os.getenv("OLLAMA_CALL_FRAMEWORK")
-logging.info(colorama.Fore.GREEN + "\tOLLAMA_CALL_FRAMEWORK = " + ollama_call_framework)
+logging.debug(colorama.Fore.MAGENTA + "\tOLLAMA_CALL_FRAMEWORK = " + ollama_call_framework)
 ollama_api_url = os.getenv("OLLAMA_API_URL")
-logging.info(colorama.Fore.GREEN + "\tOLLAMA_API_URL = " + ollama_api_url)
+logging.debug(colorama.Fore.MAGENTA + "\tOLLAMA_API_URL = " + ollama_api_url)
 
 def query_ollama_api(model: str, prompt: str, temperature: float = 0.7, api_url: str = "http://localhost:11434/api/generate"):
     # Sends a prompt to Ollama's API and returns the response.
@@ -121,13 +121,13 @@ def list_models():
     except Exception as e:
         logging.error(colorama.Fore.RED + "Error retrieving models:" + str(e))
 
-def query_ollama_library(model: str, prompt: str, temperature: float = 0.7):
+def query_ollama_library(model: str, prompt: str, temperature: float = 0.7, num_predict: float = 500):
     # Sends a prompt via ollama python library and returns the response.
 
     # :param model: The name of the model to use (e.g., 'mistral', 'gemma', etc.).
     # :param prompt: The text prompt to send to the model.
     # :param temperature: Controls randomness (lower = more deterministic).
-    # :param api_url: The URL of the Ollama API endpoint (default: localhost).
+    # :param num_predict: # Maximum number of tokens to generate
 
     # :return: The generated response from the model.
 
@@ -143,7 +143,7 @@ def query_ollama_library(model: str, prompt: str, temperature: float = 0.7):
                 "temperature": temperature,  # Controls randomness (0 = deterministic, 1 = max randomness)
                 "top_k": 50,         # Limits sampling to top-K most likely tokens
                 "top_p": 0.9,        # Nucleus sampling (alternative to top_k)
-                "num_predict": 50     # Maximum number of tokens to generate
+                "num_predict": num_predict     # Maximum number of tokens to generate
             },
             stream=False
         )
@@ -156,7 +156,7 @@ def query_ollama_library(model: str, prompt: str, temperature: float = 0.7):
         logging.info(colorama.Fore.GREEN + f"Tokens Evaluated: {tokens_evaluated}")
         logging.info(colorama.Fore.GREEN + f"Total Execution Time: {total_time_s:.2f} s")  # Display 2 decimal places
 
-        return response['response']
+        return [response['response'], round(total_time_s,2), tokens_evaluated]
     
     except requests.exceptions.RequestException as e:
         logging.error(colorama.Fore.RED + "Error calling Ollama")
@@ -171,11 +171,53 @@ if __name__ == "__main__":
     #        print(f"  - {question}")
     #    print()
     
+    # Test 1
+    # prompt = "What is the capital of France?"
+
+    # Test 2
+    # prompt = """
+    #    Rewrite the following message into a professional and well-structured email
+    #    suitable for communication with C-level executives or senior leadership.
+    #    Ensure the tone is clear, concise, and appropriately formal while maintaining
+    #    the original intent. The email should reflect a structured approach, including
+    #    a subject line, a clear introduction, body, and a polite closing.
+    #
+    #    If the original text is very brief (only a couple of lines), refine it without
+    #    overcomplicating—keep it succinct while ensuring it remains polished and professional.
+    #    Text to rewrite:
+    #    Hey, I saw the document you sent, but I think we need to change a few
+    #    things. Some parts are unclear, and we should probably add more details
+    #    in section 3. Let me know when you can update it. Thanks.
+    #    """
+
+    # Test 3
+    prompt = """
+        Rewrite the following message into a professional and well-structured email
+        suitable for communication with C-level executives or senior leadership.
+        Ensure the tone is clear, concise, and appropriately formal while maintaining
+        the original intent. The email should reflect a structured approach, including
+        a subject line, a clear introduction, body, and a polite closing.
+    
+        If the original text is very brief (only a couple of lines), refine it without
+        overcomplicating—keep it succinct while ensuring it remains polished and professional.
+        Text to rewrite:
+        Hey, we’ve been reviewing the project timeline, and I don’t think we can meet the
+        original deadline. The integration is taking longer than expected, and we’ve run
+        into some unforeseen technical issues. I know this isn’t ideal, but we might need
+        more time. Maybe we can extend the deadline by two weeks? Let me know if that’s
+        possible. Thanks.
+    """
+    
+    print("There are " + str(len(list_models())) + " models to test")
+    print("Prompt used for the test: " + prompt)
     for model in list_models():
-        print(model)
-        print(query_ollama_library(
+        print("Model: " + model)
+        response = query_ollama_library(
             model=model,
-            prompt='What is the capital of France?',
-        ))
-    
-    
+            prompt=prompt,
+            temperature=0.7,
+            num_predict=1000
+        )
+        print("Response: " + response[0])
+        print("Duration: " + str(response[1]) + " s")
+        print("Number of tokens: " + str(response[2]))
