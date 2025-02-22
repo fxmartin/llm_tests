@@ -11,8 +11,8 @@ Description:
 
 Usage:
     This script is meant to be called from another Python script with the following functions:
-        - from XXXXXXX.logging import Config
-        - then simply use a variable by calling Config.VARIABLE
+        - from XXXXXXX.logging import Logger
+        - then simply call one of the class methods (Logger.debug, Logger.info, etc.)
 
 Requirements:
     - Python 3.x
@@ -50,11 +50,11 @@ logging.basicConfig(
     level=logging_level,
     format="%(asctime)s - %(levelname)s - %(message)s")
         
-logging.debug(colorama.Fore.MAGENTA + "Class Config properly initialised")
+logging.debug(colorama.Fore.MAGENTA + "Config: Class Config properly initialised")
 
 class Logger:
-    # A class to submit log messages depending on LOG_LEVEL with colors thanks to colorama.
-     
+    # A set of classs to submit log messages depending on LOG_LEVEL with colors thanks to colorama.
+    @staticmethod
     def debug(message:str):
         # Log a DEBUG message with color
         logging.debug(colorama.Fore.MAGENTA + message)
