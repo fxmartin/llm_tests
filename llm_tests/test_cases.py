@@ -54,7 +54,7 @@ class TestCases:
         "Test case 1 - Easy question": [
             "What is the capital of France?"
         ],
-        "Test case 2 - Simple rewrite1:": [
+        "Test case 2 - Simple rewrite:": [
             """
             Rewrite the following message into a professional and well-structured email
             suitable for communication with C-level executives or senior leadership.
@@ -88,7 +88,7 @@ class TestCases:
             possible. Thanks.
             """
         ],
-        "Test case 4 - Document summarising1": [
+        "Test case 4 - Document summarising": [
             """
             Summarize the following long business document into a structured, concise, and
             professional executive summary. Ensure that the summary highlights key takeaways,

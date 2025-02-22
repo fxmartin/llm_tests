@@ -1,3 +1,34 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+File Name: llm_tests.py
+Author: FX
+Date Created: 2025-02-22
+Last Modified: 2025-02-22
+Description:
+    This python program is designed to automate the execution of tests cases with locally run LLMs.
+
+Usage:
+    Launched the script without any parameters.
+    Environment variables can be changed in the .env file.
+    test cases are defined in the file llm_tests\test_cases.py where you can find the various prompts used.
+    The script use ollama list to test the locally pulled models.
+    The final results is printed in the terminal and copied into the clipboard for easy pasting into a markdown document.
+    There are two copy/paste done:
+        1. the first with only the results
+        2. the second with the prompt used to ask ChatGPT for analysis of the results.
+
+Requirements:
+    - Python 3.x
+    - Required libraries (time, requests, ollama, json, pyperclip, re)
+
+Notes:
+    - Follow PEP 8 for coding style.
+    - Ensure comments are updated when code changes.
+
+License:
+    MIT License. See LICENSE file for details.
+"""
 import time
 import requests
 import ollama
@@ -9,7 +40,6 @@ from llm_tests.display import ColoramaWrapper
 from llm_tests.chatgpt import Analysis
 import pyperclip
 import re
-import time
 
 # Retrieve the .env variables
 Logger.debug("Environment Variables retrieved from .env file")
@@ -130,10 +160,31 @@ def query_ollama_library(model: str, prompt: str, temperature: float = Config.MO
 #       style (str): The text style (e.g., "BRIGHT", "DIM").
 #
 #   Returns:
-#   str: The initial text without formatting
+#       str: The initial text without formatting
 def colorPrint(text: str, color: str = None, background: str = None, style: str = None):
     print(display.color_text(text, color, background, style) + display.reset())
     return(text)
+
+# Write a string to a file.
+#   Args:
+#       filepath (str): The file.
+#       content (str): The string to write into the file.
+def write_to_file(file_path, content):
+    try:
+        # Open the file in write mode ('w')
+        with open(file_path, 'w') as f:
+            # Write the content to the file
+            f.write(content)
+
+    except FileNotFoundError:
+        print(f"Error: The file '{file_path}' does not exist.")
+
+    except PermissionError:
+        print(f"Error: You do not have permission to write to the file '{file_path}'.")
+
+    except Exception as e:
+        # Catch any other exceptions that may occur
+        print(f"An unexpected error occurred while writing to file '{file_path}': {str(e)}")
 
 if __name__ == "__main__":
     start_time = time.time()
@@ -141,9 +192,9 @@ if __name__ == "__main__":
     display = ColoramaWrapper()
     clipboard = ""
     clipboard += colorPrint( "# Tests to compare various LLMs running locally with Ollama", color="blue", style="bright")
-    clipboard += "\n" + colorPrint("## Models tests", color="blue", style="bright")
+    clipboard += "\n" + colorPrint("## Large Language Models (LLM) tested", color="blue", style="bright")
     models = list_models()
-    clipboard += "\n" + colorPrint("There are " + str(len(models)) + " models install locally, which will be tested.")
+    clipboard += "\n" + colorPrint("There are " + str(len(models)) + " models installed locally, which will be tested.")
     models.sort()
     for model in models:
         clipboard += "\n" + colorPrint("- Model: " + model)
@@ -157,8 +208,9 @@ if __name__ == "__main__":
             clipboard += "\n" + colorPrint("## Test case: " + testcase + "\n")
             for prompt in prompts:
                 clipboard += "\n" + colorPrint("- Prompt: " + prompt+ "\n")
+                """
                 for model in models:
-                    clipboard += "\n" + colorPrint("\t- Model: " + model)
+                    clipboard += "\n\n" + colorPrint("### Model: " + model)
                     response = query_ollama_library(
                         model=model,
                         prompt=prompt,
@@ -170,7 +222,7 @@ if __name__ == "__main__":
                     clipboard += "\n" + colorPrint("\t- Response: " + cleaned_response)
                     clipboard += "\n" + colorPrint("\t- Duration: " + str(response[1])+" s")
                     clipboard += "\n" + colorPrint("\t- Number of tokens: " + str(response[2]) + "\n")
-    
+    """
     # Instanciation of ChatGPT class
     chatgpt = Analysis()
 
@@ -180,7 +232,12 @@ if __name__ == "__main__":
     elapsed_time = end_time - start_time
     clipboard += "\n\n" + colorPrint("Total time taken for executing these tests on a Macbook M3 Max with 48 Gb of RAM: " + str(round(elapsed_time,0)) + " seconds.\n")
     
-    # Copy the results to the clipboard
+    # Copy the results to the clipboard and write the a file
     pyperclip.copy(clipboard)
+    write_to_file('./results/tests_results.md', clipboard)
+
     input("Press Enter to continue...")
+    
+    # Copy the prompt & results to the clipboard and write the a file
     pyperclip.copy(results)
+    write_to_file('./results/prompt_for_ChatGPT_4o.md', results)

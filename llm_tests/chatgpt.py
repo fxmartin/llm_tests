@@ -51,9 +51,12 @@ class Analysis:
                 coherence, and completeness.
 	            - Efficiency Difference: Speed and token usage compared to ChatGPT.
 	        5. A conclusion with final recommendations.
+        
+        Here are the results to analyse:
     """
 
     ChatGPT_End_Prompt = """
+    
     Evaluation Criteria:
 	    - Response Speed: Faster models score higher.
 	    - Token Efficiency: Models using fewer tokens for the same result score higher.
@@ -69,5 +72,5 @@ class Analysis:
 	    5. Conclusion - Recommendations on which models to use based on performance and use case suitability.
     """
 
-    def prompt(results: str):
+    def prompt(self, results: str):
         return (Analysis.ChatGPT_Start_Prompt + "\n" + results + "\n" + Analysis.ChatGPT_End_Prompt)
