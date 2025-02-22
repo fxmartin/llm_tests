@@ -137,7 +137,7 @@ if __name__ == "__main__":
     display = ColoramaWrapper()
     clipboard = ""
     clipboard += colorPrint( "# Tests to compare various LLMs running locally with Ollama", color="blue", style="bright")
-    clipboard += "\n" + colorPrint("## 1. Models tests", color="blue", style="bright")
+    clipboard += "\n" + colorPrint("## Models tests", color="blue", style="bright")
     models = list_models()
     clipboard += "\n" + colorPrint("There are " + str(len(models)) + " models install locally, which will be tested.")
     models.sort()
@@ -146,19 +146,24 @@ if __name__ == "__main__":
     clipboard += "\n" + colorPrint("")
     clipboard += "\n" + colorPrint("For each model, the various test cases will be executed and the result, duration and number of tokens collected.")
     clipboard += "\n" + colorPrint("The consolidated results will then be submitted to OpenAI ChatGPT 4o for analysis and comparison.")
+    clipboard += "\n" + colorPrint("")
+    
+    # Start of tests
+    for testcase, prompts in TestCases.testcases.items():
+            clipboard += "\n" + colorPrint("## Test case: {testcase}")
+            for prompt in prompts:
+                clipboard += "\n" + colorPrint("- {prompt}")
+                for model in list_models():
+                    clipboard += "\n" + colorPrint("\t- Model: " + model)
+                    response = query_ollama_library(
+                        model=model,
+                        prompt=prompt,
+                        temperature=0.7,
+                        num_predict=1000
+                    )
+                    clipboard += "\n" + colorPrint("\t- Response: " + response[0])
+                    clipboard += "\n" + colorPrint("\t- Duration: " + str(response[1])+" s")
+                    clipboard += "\n" + colorPrint("\t- Number of tokens: " + str(response[2]))
+    
+    # Copy the results to the clipboard
     pyperclip.copy (clipboard)
-
-    """
-    print("Prompt used for the test: " + prompt)
-    for model in list_models():
-        print("Model: " + model)
-        response = query_ollama_library(
-            model=model,
-            prompt=prompt,
-            temperature=0.7,
-            num_predict=1000
-        )
-        print("Response: " + response[0])
-        print("Duration: " + str(response[1]) + " s")
-        print("Number of tokens: " + str(response[2]))
-"""
