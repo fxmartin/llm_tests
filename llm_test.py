@@ -6,7 +6,10 @@ from llm_tests.config import Config
 from llm_tests.logging import Logger
 from llm_tests.test_cases import TestCases
 from llm_tests.display import ColoramaWrapper
+from llm_tests.chatgpt import Analysis
 import pyperclip
+import re
+import time
 
 # Retrieve the .env variables
 Logger.debug("Environment Variables retrieved from .env file")
@@ -133,6 +136,7 @@ def colorPrint(text: str, color: str = None, background: str = None, style: str 
     return(text)
 
 if __name__ == "__main__":
+    start_time = time.time()
     # Instanciate the ColoramaWrapper class
     display = ColoramaWrapper()
     clipboard = ""
@@ -150,10 +154,10 @@ if __name__ == "__main__":
     
     # Start of tests
     for testcase, prompts in TestCases.testcases.items():
-            clipboard += "\n" + colorPrint("## Test case: {testcase}")
+            clipboard += "\n" + colorPrint("## Test case: " + testcase + "\n")
             for prompt in prompts:
-                clipboard += "\n" + colorPrint("- {prompt}")
-                for model in list_models():
+                clipboard += "\n" + colorPrint("- Prompt: " + prompt+ "\n")
+                for model in models:
                     clipboard += "\n" + colorPrint("\t- Model: " + model)
                     response = query_ollama_library(
                         model=model,
@@ -161,9 +165,22 @@ if __name__ == "__main__":
                         temperature=0.7,
                         num_predict=1000
                     )
-                    clipboard += "\n" + colorPrint("\t- Response: " + response[0])
+                    cleaned_response = re.sub(r"<think>.*?</think>", "", response[0])
+                    cleaned_response = cleaned_response.strip()
+                    clipboard += "\n" + colorPrint("\t- Response: " + cleaned_response)
                     clipboard += "\n" + colorPrint("\t- Duration: " + str(response[1])+" s")
-                    clipboard += "\n" + colorPrint("\t- Number of tokens: " + str(response[2]))
+                    clipboard += "\n" + colorPrint("\t- Number of tokens: " + str(response[2]) + "\n")
+    
+    # Instanciation of ChatGPT class
+    chatgpt = Analysis()
+
+    results = chatgpt.prompt(clipboard)
+
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    clipboard += "\n\n" + colorPrint("Total time taken for executing these tests on a Macbook M3 Max with 48 Gb of RAM: " + str(round(elapsed_time,0)) + " seconds.\n")
     
     # Copy the results to the clipboard
-    pyperclip.copy (clipboard)
+    pyperclip.copy(clipboard)
+    input("Press Enter to continue...")
+    pyperclip.copy(results)
