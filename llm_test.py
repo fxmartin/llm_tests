@@ -208,7 +208,6 @@ if __name__ == "__main__":
             clipboard += "\n" + colorPrint("## Test case: " + testcase + "\n")
             for prompt in prompts:
                 clipboard += "\n" + colorPrint("- Prompt: " + prompt+ "\n")
-                """
                 for model in models:
                     clipboard += "\n\n" + colorPrint("### Model: " + model)
                     response = query_ollama_library(
@@ -222,7 +221,7 @@ if __name__ == "__main__":
                     clipboard += "\n" + colorPrint("\t- Response: " + cleaned_response)
                     clipboard += "\n" + colorPrint("\t- Duration: " + str(response[1])+" s")
                     clipboard += "\n" + colorPrint("\t- Number of tokens: " + str(response[2]) + "\n")
-    """
+
     # Instanciation of ChatGPT class
     chatgpt = Analysis()
 
