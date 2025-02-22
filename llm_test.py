@@ -1,11 +1,9 @@
-import logging
 import time
 import requests
-from dotenv import load_dotenv
-import os
 import ollama
-import colorama
 import json
+from llm_tests.config import Config
+from llm_tests.logging import Logger
 
 # Structured list of prompts tailored for a comprehensive evaluation of LLMs
 # Where each capability has a list of related questions
@@ -27,42 +25,19 @@ questionnaire = {
 	    "How would you structure a digital transformation roadmap for a 100-year-old financial institution?"
     ]
 }
-
-# Initialize colorama
-colorama.init(autoreset=True)
-
-load_dotenv() # Load environment variables from .env file
-
-# Get logging level from .env, default to WARNING if not set
-log_level = os.getenv("LOG_LEVEL", "WARNING").upper()
-
-# Convert string to logging level
-log_level_mapping = {
-    "DEBUG": logging.DEBUG,
-    "INFO": logging.INFO,
-    "WARNING": logging.WARNING,
-    "ERROR": logging.ERROR,
-    "CRITICAL": logging.CRITICAL
-}
-
-logging_level = log_level_mapping.get(log_level, logging.WARNING)
-
-# Configure logging
-logging.basicConfig(
-    level=logging_level,
-    format="%(asctime)s - %(levelname)s - %(message)s")
     
 # Retrieve the .env variables
-logging.debug(colorama.Fore.MAGENTA + "Loading the .env variables")
-logging.debug(colorama.Fore.MAGENTA + "\tLOG_LEVEL = " + log_level)
-reasoning_model_id = os.getenv("REASONING_MODEL_ID")
-logging.debug(colorama.Fore.MAGENTA + "\tREASONING_MODEL_ID = " + reasoning_model_id)
-ollama_call_framework = os.getenv("OLLAMA_CALL_FRAMEWORK")
-logging.debug(colorama.Fore.MAGENTA + "\tOLLAMA_CALL_FRAMEWORK = " + ollama_call_framework)
-ollama_api_url = os.getenv("OLLAMA_API_URL")
-logging.debug(colorama.Fore.MAGENTA + "\tOLLAMA_API_URL = " + ollama_api_url)
+Logger.debug("Environment Variables retrieved from .env file")
+Logger.debug("\tLOG_LEVEL = " + Config.LOG_LEVEL)
+Logger.debug("\tREASONING_MODEL_ID = " + Config.REASONING_MODEL_ID)
+Logger.debug("\tOLLAMA_CALL_FRAMEWORK = " + Config.OLLAMA_CALL_FRAMEWORK)
+Logger.debug("\tOLLAMA_API_URL = " + Config.OLLAMA_API_URL)
+Logger.debug("\tMODEL_TEMPERATURE = " + str(Config.MODEL_TEMPERATURE))
+Logger.debug("\tMODEL_TOP_K = " + str(Config.MODEL_TOP_K))
+Logger.debug("\tMODEL_TOP_P = " + str(Config.MODEL_TOP_P))
+Logger.debug("\tNUM_PREDICT = " + str(Config.NUM_PREDICT))
 
-def query_ollama_api(model: str, prompt: str, temperature: float = 0.7, api_url: str = "http://localhost:11434/api/generate"):
+def query_ollama_api(model: str, prompt: str, temperature: float = Config.MODEL_TEMPERATURE, api_url: str = Config.OLLAMA_API_URL):
     # Sends a prompt to Ollama's API and returns the response.
 
     # :param model: The name of the model to use (e.g., 'mistral', 'gemma', etc.).
@@ -80,11 +55,11 @@ def query_ollama_api(model: str, prompt: str, temperature: float = 0.7, api_url:
     }
 
     try:
-        logging.info(colorama.Fore.GREEN + "Calling Ollama with the following parameters:")
-        logging.info(colorama.Fore.GREEN + "\tModel: " + model)
-        logging.info(colorama.Fore.GREEN + "\tTemperature: " + temperature)
-        logging.info(colorama.Fore.GREEN + "\tPrompt: " + prompt)
-        logging.info(colorama.Fore.GREEN + "\tAPI Url: " + api_url)
+        Logger.info("Calling Ollama with the following parameters:")
+        Logger.info("\tModel: " + model)
+        Logger.info("\tTemperature: " + temperature)
+        Logger.info("\tPrompt: " + prompt)
+        Logger.info("\tAPI Url: " + api_url)
         response = requests.post(api_url, json=payload)
         
         data = response.json()
@@ -95,14 +70,14 @@ def query_ollama_api(model: str, prompt: str, temperature: float = 0.7, api_url:
         # total_time_ms = total_time_ns / 1_000_000  # Convert to milliseconds
         total_time_s = total_time_ns / 1_000_000_000  # Convert to seconds
 
-        logging.info(colorama.Fore.GREEN + f"Tokens Evaluated: {tokens_evaluated}")
-        logging.info(colorama.Fore.GREEN + f"Total Execution Time: {total_time_s:.2f} s")  # Display 2 decimal places
+        Logger.info(f"Tokens Evaluated: {tokens_evaluated}")
+        Logger.info(f"Total Execution Time: {total_time_s:.2f} s")  # Display 2 decimal places
         
         response.raise_for_status()
         return response.json().get("response", "No response from Ollama").strip()
         
     except requests.exceptions.RequestException as e:
-        logging.error(colorama.Fore.RED + "Error connecting to Ollama API")
+        Logger.error("Error connecting to Ollama API")
         return f"Error connecting to Ollama API: {e}"
 
 def list_models():
@@ -119,9 +94,9 @@ def list_models():
             return None
 
     except Exception as e:
-        logging.error(colorama.Fore.RED + "Error retrieving models:" + str(e))
+        Logger.error("Error retrieving models:" + str(e))
 
-def query_ollama_library(model: str, prompt: str, temperature: float = 0.7, num_predict: float = 500):
+def query_ollama_library(model: str, prompt: str, temperature: float = Config.MODEL_TEMPERATURE, num_predict: float = Config.NUM_PREDICT):
     # Sends a prompt via ollama python library and returns the response.
 
     # :param model: The name of the model to use (e.g., 'mistral', 'gemma', etc.).
@@ -132,10 +107,10 @@ def query_ollama_library(model: str, prompt: str, temperature: float = 0.7, num_
     # :return: The generated response from the model.
 
     try:
-        logging.info(colorama.Fore.GREEN + "Calling Ollama with the following parameters:")
-        logging.info(colorama.Fore.GREEN + "\tModel: " + model)
-        logging.info(colorama.Fore.GREEN + "\tTemperature: " + str(temperature))
-        logging.info(colorama.Fore.GREEN + "\tPrompt: " + prompt)
+        Logger.info("Calling Ollama with the following parameters:")
+        Logger.info("\tModel: " + model)
+        Logger.info("\tTemperature: " + str(temperature))
+        Logger.info("\tPrompt: " + prompt)
         response = ollama.generate(
             model=model,
             prompt=prompt,
@@ -153,13 +128,13 @@ def query_ollama_library(model: str, prompt: str, temperature: float = 0.7, num_
         total_time_ns = response['total_duration']
         total_time_s = total_time_ns / 1_000_000_000  # Convert to seconds
 
-        logging.info(colorama.Fore.GREEN + f"Tokens Evaluated: {tokens_evaluated}")
-        logging.info(colorama.Fore.GREEN + f"Total Execution Time: {total_time_s:.2f} s")  # Display 2 decimal places
+        Logger.info(f"Tokens Evaluated: {tokens_evaluated}")
+        Logger.info(f"Total Execution Time: {total_time_s:.2f} s")  # Display 2 decimal places
 
         return [response['response'], round(total_time_s,2), tokens_evaluated]
     
     except requests.exceptions.RequestException as e:
-        logging.error(colorama.Fore.RED + "Error calling Ollama")
+        Logger.error("Error calling Ollama")
         return f"Error calling Ollama: {e}"
 
 if __name__ == "__main__":
@@ -268,6 +243,7 @@ if __name__ == "__main__":
     """
 
     print("There are " + str(len(list_models())) + " models to test")
+    """
     print("Prompt used for the test: " + prompt)
     for model in list_models():
         print("Model: " + model)
@@ -280,3 +256,4 @@ if __name__ == "__main__":
         print("Response: " + response[0])
         print("Duration: " + str(response[1]) + " s")
         print("Number of tokens: " + str(response[2]))
+"""
