@@ -34,5 +34,24 @@ The primary goal of this experiment is to assess the performance, accuracy, and 
 2. Modify `.env` to define test cases and parameters.
 3. Execute the test script:
 
-   ```bash
+   ```
    python llm_test.py
+   ````
+
+## Insights and Findings
+
+After running multiple test scenarios, key insights were obtained regarding the feasibility of using local LLMs. These results, documented in `/results`, highlight the trade-offs between performance, accuracy, and resource consumption.
+
+## Future Work
+
+- Expanding test cases with different domains (coding, finance, general knowledge, creative writing).
+- Exploring optimization techniques for local model efficiency.
+- Investigating hybrid approaches combining local LLMs with cloud-based models.
+
+## Contributing
+
+Contributions are welcome! Feel free to submit pull requests or open issues for discussion.
+
+## License
+
+This project is licensed under the MIT License.
