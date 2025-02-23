@@ -1,103 +1,118 @@
-Here’s a markdown-formatted review of the comparative analysis of local LLM performance, including key findings, trends, and recommendations.
+Here is the Comparative Analysis of Local LLM Performance (vs. ChatGPT) in GitHub README format:
 
-# Comparative Analysis of Local LLM Performance vs. ChatGPT
+# Comparative Analysis of Local LLM Performance (vs. ChatGPT)
 
-## Executive Summary
-
-This analysis evaluates the performance of locally hosted Large Language Models (LLMs) in comparison to ChatGPT. The key evaluation criteria include **response time (speed), token usage (efficiency), and overall response quality**. 
-
-### Key Findings:
-- **Top performers in efficiency** (fastest response with minimal tokens):  
-  - **Qwen2.5-Coder** (3.01s, 8 tokens)
-  - **Llava** (3.05s, 9 tokens)
-  - **Llama3 (latest)** (3.36s, 8 tokens)
-  - **Llama3.1:8b** (3.51s, 8 tokens)
-  - **Deepseek-R1:7B** (3.62s, 12 tokens)
-  
-- **Worst performers in efficiency** (slow response or excessive token usage):  
-  - **Openthinker:32B** (58.99s, 725 tokens)
-  - **Deepseek-R1:32B** (28.32s, 12 tokens but very slow)
-  - **Deepseek-R1:14B** (18.55s, 423 tokens)
-  - **Openthinker:7B** (21.26s, 1000 tokens)
-  
-- **General Trends**:
-  - **Llama-based models (Llama3, Llama3.1, and Llava)** perform well in **response speed and efficiency**.
-  - **Openthinker and Deepseek 32B models** exhibit **high computational cost**, leading to slow responses.
-  - **Phi4, Dolphin3, and Codestral** show **good balance between response speed and token usage**.
-  - Some models **overuse tokens unnecessarily** due to verbose responses, especially **Openthinker**.
+## 📌 Objective  
+This report analyzes the performance of different locally run Large Language Models (LLMs) based on response time, token usage, and overall efficiency. Each model's response is compared with ChatGPT to assess:  
+- **Response Similarity**: Clarity, correctness, and completeness.  
+- **Efficiency**: Speed and token consumption.  
 
 ---
 
-## Comparative Analysis
+## 📊 1. Executive Summary  
+Key findings from the analysis of 17 locally hosted LLMs:  
 
-### 1. **Performance Trends**
-- **Speed vs. Quality Trade-off**:  
-  - **Ultra-fast models (Qwen2.5-Coder, Llava, Llama3)** provide short, precise responses but might lack depth.
-  - **Verbose models (Openthinker, Deepseek-R1:14B)** generate **longer responses**, often with unnecessary details, which increases processing time.
-  - **Balanced models (Codestral, Dolphin3, Phi4)** manage to maintain **reasonable response speed and structured outputs**.
+- **🏆 Top Performers** (Balanced speed, token efficiency, and quality):
+  - **qwen2.5-coder** (🚀 Fastest at 5.59s, only 137 tokens)
+  - **llama3.1:8b** (7.39s, 197 tokens)
+  - **llama3:latest** (7.51s, 235 tokens)  
 
-- **Response Coherence**:  
-  - **Some models add unnecessary cognitive processing** ("thinking steps"), such as **Openthinker and Deepseek**, which increases response time.
-  - **Short responses are not necessarily better**, but excessive verbosity leads to inefficiency.
+- **📝 Best Response Quality** (Closest to ChatGPT in professionalism, clarity, and structure):
+  - **deepseek-r1:32b** (58.19s, 694 tokens)  
+  - **codestral:22b** (19.57s, 277 tokens)  
+  - **o639/Dolphin3.0-Mistral-24B-Q6_K_L** (30.2s, 280 tokens)  
 
-### 2. **Structured Performance Table**
+- **⚠️ Worst Performers** (Slowest and excessive token use):
+  - **openthinker:32b** (⏳ 87.06s, 1000 tokens)  
+  - **deepseek-r1:32b** (⏳ 58.19s, 694 tokens)  
+  - **deepseek-r1:14b** (⏳ 29.21s, 636 tokens)  
 
-| LLM Name                   | Test Case Name  | Duration (s) | Tokens Used | Efficiency Score* |
-|----------------------------|----------------|--------------|-------------|------------------|
-| **Qwen2.5-Coder**          | Easy Question  | **3.01s**    | **8**       | **3.09**        |
-| **Llava**                  | Easy Question  | **3.05s**    | **9**       | **3.14**        |
-| **Llama3 (latest)**        | Easy Question  | **3.36s**    | **8**       | **3.44**        |
-| **Llama3.1:8B**            | Easy Question  | **3.51s**    | **8**       | **3.59**        |
-| **Deepseek-R1:7B**         | Easy Question  | **3.62s**    | **12**      | **3.74**        |
-| **Openthinker:32B**        | Easy Question  | **58.99s**   | **725**     | **66.24**       |
-| **Openthinker:7B**         | Easy Question  | **21.26s**   | **1000**    | **31.26**       |
-
-> **Efficiency Score** = Duration (s) + (Tokens Used / 100)  
-> Lower score = better efficiency.
+- **🔍 Most Token Efficient** (Minimal token use without losing clarity):
+  - **qwen2.5-coder** (137 tokens)  
+  - **gemma2** (142 tokens)  
+  - **qwen2.5** (145 tokens)  
 
 ---
 
-## 3. **Comparison with ChatGPT**
-Each model was compared to ChatGPT for **response similarity, coherence, and efficiency**.
+## 🔍 2. Comparative Analysis  
+### ⏩ **Response Speed Trends**  
+- **Lighter models (8B-14B)** provided responses in under 10 seconds.  
+- **Heavyweight models (32B+) like Openthinker and Deepseek** were significantly slower (50s+).  
 
-- **Models that closely match ChatGPT in quality & efficiency**:  
-  - **Qwen2.5-Coder** and **Llama3.1** provide near-instant answers with **concise and accurate** responses.
-  - **Dolphin3 and Codestral** generate structured responses **close to ChatGPT’s tone**.
+### 🎯 **Token Usage & Efficiency**  
+- **Excessive Token Use:** Openthinker:32B (1000 tokens) & Deepseek:32B (694 tokens).  
+- **Efficient Models:** Qwen2.5-coder (137 tokens) & Gemma2 (142 tokens).  
 
-- **Models that differ significantly from ChatGPT**:  
-  - **Openthinker** produces **unnecessarily long responses** with extensive **internal thought processes**, which is less efficient.
-  - **Deepseek-32B** and **Openthinker-32B** take much longer to process but do not provide significantly higher quality.
-
-### **Response Similarity Breakdown**
-| LLM Model               | Similarity to ChatGPT | Efficiency Rating |
-|-------------------------|----------------------|-------------------|
-| **Qwen2.5-Coder**       | **High** (Concise, structured) | **Excellent** |
-| **Llava**               | **High** (Short, precise) | **Excellent** |
-| **Llama3.1:8B**         | **High** (Coherent, fast) | **Very Good** |
-| **Deepseek-R1:14B**     | **Moderate** (Overly verbose) | **Poor** |
-| **Openthinker:32B**     | **Low** (Extremely slow, redundant) | **Very Poor** |
+### 📝 **Quality & Coherence**  
+- **Best Structure:** Deepseek-R1:32B, Codestral:22B, Dolphin3.0-Mistral.  
+- **Issues:** Some models (Openthinker) included unnecessary "thinking process" text.  
 
 ---
 
-## 4. **Conclusion & Recommendations**
+## 📌 3. Structured Performance Table  
 
-### **Best LLMs for Performance & Efficiency**
-✅ **Qwen2.5-Coder** – **Best balance of speed and clarity**  
-✅ **Llama3.1:8B** – **Excellent token efficiency**  
-✅ **Llava** – **Very fast response time, good for short queries**  
-✅ **Dolphin3 & Codestral** – **Well-balanced structured responses**
+| **LLM Name** | **Duration (s)** | **Tokens Used** | **Overall Rating** (⭐ out of 5) |
+|-------------|----------------|--------------|--------------------|
+| **qwen2.5-coder** | **5.59**  | **137**  | ⭐⭐⭐⭐⭐ (🏆) |
+| **llama3.1:8b** | 7.39  | 197  | ⭐⭐⭐⭐ |
+| **llama3:latest** | 7.51  | 235  | ⭐⭐⭐⭐ |
+| **qwen2.5:14b** | 10.91  | 145  | ⭐⭐⭐⭐ |
+| **gemma2:latest** | 10.14  | 142  | ⭐⭐⭐⭐ |
+| **phi4:14b** | 12.11  | 188  | ⭐⭐⭐ |
+| **dolphin3** | 19.0  | 194  | ⭐⭐⭐ |
+| **mistral-small:24b** | 19.33  | 182  | ⭐⭐⭐ |
+| **codestral:22b** | 19.57  | 277  | ⭐⭐⭐⭐ |
+| **deepseek-r1:7b** | 26.58  | 397  | ⭐⭐ |
+| **o639/Dolphin3.0-Mistral-24B** | 30.2  | 280  | ⭐⭐⭐ |
+| **deepseek-r1:14b** | 29.21  | 636  | ⭐⭐ |
+| **deepseek-r1:32b** | 58.19  | 694  | ⭐⭐ |
+| **openthinker:7b** | 21.65  | 1000  | ⭐⭐ |
+| **openthinker:32b** | **87.06** | **1000** | ⭐ |
 
-### **LLMs to Avoid for Real-Time Queries**
-❌ **Openthinker (32B & 7B)** – **Extremely slow, excessive token usage**  
-❌ **Deepseek-R1:32B** – **Long processing time with minimal response improvement**  
-❌ **Deepseek-R1:14B** – **Overly verbose, inefficient for real-time usage**
+---
 
-### **Final Recommendations**
-- **For fast and precise answers:** Use **Qwen2.5-Coder, Llama3.1:8B, and Llava**.
-- **For structured business communication:** Use **Codestral or Dolphin3**.
-- **For deep reasoning tasks (if response time isn’t a concern):** **Deepseek-R1:14B** may work, but ChatGPT remains superior.
-- **Avoid high-latency models** (**Openthinker 32B, Deepseek-32B**) unless **high verbosity is required**.
+## ⚖️ 4. Comparison with ChatGPT  
+| **LLM Name** | **Response Similarity** (ChatGPT Benchmark) | **Efficiency Difference** |
+|-------------|--------------------------------|-------------------|
+| **codestral:22b** | High (Well-structured, formal) | 19.57s, moderate tokens |
+| **deepseek-r1:14b** | Moderate (slightly verbose) | 29.21s, high tokens |
+| **deepseek-r1:32b** | High (professional but slow) | 58.19s, very high tokens |
+| **deepseek-r1:7b** | Moderate (brief, lacks depth) | 26.58s, fair tokens |
+| **dolphin3:latest** | Good (Concise, lacks depth) | 19.0s, low tokens |
+| **gemma2:latest** | Good (Well-structured, brief) | **10.14s, low tokens** |
+| **llama3.1:8b** | High (Matches ChatGPT style) | 7.39s, **efficient** |
+| **llama3:latest** | High (Matches ChatGPT, strong structure) | 7.51s, **efficient** |
+| **mistral-small:24b** | Good (Slightly verbose) | 19.33s, moderate tokens |
+| **openthinker:32b** | Poor (Contains <think> artifacts) | **87.06s, bloated response** |
+| **openthinker:7b** | Poor (Verbose, inefficient) | **21.65s, bloated** |
+| **phi4:14b** | High (Professional, structured) | 12.11s, moderate tokens |
+| **qwen2.5-coder** | **Excellent (Closest to ChatGPT)** | **5.59s, most efficient** (🏆) |
+| **qwen2.5:14b** | Good (Concise, professional) | 10.91s, low tokens |
 
-**➡️ Verdict: Locally hosted models can match ChatGPT’s efficiency, but only select few (Qwen2.5-Coder, Llama3.1, Dolphin3) consistently deliver competitive performance.**
+---
 
-This markdown file is ready to copy-paste into your documentation or reports. Let me know if you need any refinements! 🚀
+## 🎯 5. Conclusion & Recommendations  
+
+### 🔥 **Best All-Around Model:**  
+**🏆 Qwen2.5-Coder** – Fastest, most token-efficient, and closest to ChatGPT.  
+
+### ✅ **Recommended for Production Use (High Speed + Efficiency):**  
+- **qwen2.5-coder** (5.59s, 137 tokens)  
+- **llama3.1:8b** (7.39s, 197 tokens)  
+- **gemma2** (10.14s, 142 tokens)  
+
+### 🚀 **Recommended for High-Quality Business Writing:**  
+- **deepseek-r1:32b** (58.19s, 694 tokens)  
+- **codestral:22b** (19.57s, 277 tokens)  
+- **o639/Dolphin3.0-Mistral-24B** (30.2s, 280 tokens)  
+
+### ⚠️ **Avoid Due to Poor Efficiency:**  
+- **Openthinker:32b** (87.06s, 1000 tokens)  
+- **Deepseek-r1:32b** (58.19s, 694 tokens)  
+- **Openthinker:7b** (21.65s, 1000 tokens)  
+
+---
+
+This report provides insights into **which local LLMs are most efficient and reliable** for professional business communication. 🚀
+
+This markdown-formatted report is fully GitHub README-ready and structured for clarity and easy readability. 🚀

@@ -1,0 +1,98 @@
+# **Comparative Analysis of Local LLM Performance (vs. ChatGPT)**
+
+## **1. Executive Summary**
+
+This report evaluates the performance of 17 locally run Large Language Models (LLMs) using **Ollama**, assessing them against **ChatGPT** in terms of **response time, token usage, and quality of output**. The analysis focuses on a **simple rewrite test case**, transforming an informal message into a professional email suitable for C-level executives.
+
+### **Key Findings:**
+- **Fastest models:** `qwen2.5-coder:latest` (5.21s), `gemma2:latest` (6.38s), `dolphin3:latest` (6.43s)  
+- **Slowest models:** `openthinker:32b` (79.42s), `deepseek-r1:32b` (49.93s), `o639/Dolphin3.0-Mistral-24B-Q6_K_L` (23.63s)  
+- **Most token-efficient models:** `gemma2:latest` (105 tokens), `qwen2.5-coder:latest` (106 tokens), `qwen2.5:14b` (111 tokens)  
+- **Most verbose models:** `openthinker:32b` (1000 tokens), `deepseek-r1:32b` (600 tokens), `deepseek-r1:14b` (473 tokens)  
+- **Best overall balance of speed, token efficiency, and clarity:** `dolphin3:latest`, `gemma2:latest`, `qwen2.5:14b`
+
+### **General Trends:**
+- **Smaller models (7B–14B parameters) tend to be faster and more concise.**  
+- **Larger models (24B–32B) produced more elaborate responses but had longer response times and higher token usage.**  
+- **Some models (e.g., `openthinker:32b`) included excessive thought process text (`<think>` sections) before delivering the final response, impacting efficiency.**  
+- **ChatGPT generally remains superior in balancing clarity, brevity, and professionalism.**  
+
+---
+
+## **2. Comparative Analysis**
+
+### **Performance Trends**
+- Models like `qwen2.5-coder:latest`, `dolphin3:latest`, and `gemma2:latest` **delivered responses quickly while using fewer tokens**, making them ideal for real-time applications.  
+- Models like `deepseek-r1:32b` and `openthinker:32b` **took significantly longer** to generate responses, despite having large parameter sizes, indicating inefficiencies in processing.  
+- Token usage varied widely, with some models producing overly verbose outputs **without adding substantial value.**
+
+### **Best and Worst Performers**
+- **Best performers (high-quality, fast, and concise):** `dolphin3:latest`, `gemma2:latest`, `qwen2.5:14b`
+- **Worst performers (slow and inefficient):** `openthinker:32b`, `deepseek-r1:32b`, `o639/Dolphin3.0-Mistral-24B-Q6_K_L`
+
+### **Efficiency Insights**
+- **Fast models with good quality outputs:** These are well-suited for business applications requiring quick turnaround.  
+- **Verbose models with redundant processing (`<think>` tags):** These may be useful for research or creative applications but are less effective for business communication.  
+- **Large models with slower responses:** Despite having more parameters, they did not consistently outperform smaller models in quality.
+
+---
+
+## **3. Structured Performance Table**
+
+| **LLM Name** | **Duration (s)** | **Tokens Used** | **Overall Rating (1-10)** |
+|-------------|----------------|----------------|----------------|
+| `qwen2.5-coder:latest` | **5.21** | **106** | **9** |
+| `gemma2:latest` | **6.38** | **105** | **9** |
+| `dolphin3:latest` | **6.43** | **142** | **9** |
+| `llama3.1:8b` | **6.28** | **161** | **8** |
+| `qwen2.5:14b` | **9.32** | **111** | **8** |
+| `phi4:14b` | **10.79** | **132** | **8** |
+| `deepseek-r1:7b` | **9.05** | **338** | **7** |
+| `mistral-small:24b` | **16.58** | **157** | **6** |
+| `codestral:22b` | **17.01** | **232** | **6** |
+| `deepseek-r1:14b` | **20.62** | **473** | **5** |
+| `openthinker:7b` | **21.61** | **1000** | **5** |
+| `o639/Dolphin3.0-Mistral-24B-Q6_K_L` | **23.63** | **181** | **4** |
+| `deepseek-r1:32b` | **49.93** | **600** | **3** |
+| `openthinker:32b` | **79.42** | **1000** | **2** |
+
+---
+
+## **4. Comparison with ChatGPT**
+
+| **LLM Name** | **Response Similarity to ChatGPT** | **Efficiency Difference** |
+|-------------|--------------------------------|--------------------------|
+| `qwen2.5-coder:latest` | High (Concise & clear) | Faster and uses fewer tokens |
+| `gemma2:latest` | High (Professional tone) | Faster and token-efficient |
+| `dolphin3:latest` | High (Well-structured) | Faster and efficient |
+| `llama3.1:8b` | Medium (Slightly verbose) | Comparable speed |
+| `qwen2.5:14b` | High (Clear & professional) | Slightly slower but token-efficient |
+| `phi4:14b` | Medium (Concise, slight lack of depth) | Slightly slower |
+| `deepseek-r1:7b` | Medium (Professional but verbose) | Slower and uses more tokens |
+| `mistral-small:24b` | Medium (Balanced structure) | Slower than ChatGPT |
+| `codestral:22b` | Medium (Good structure, slightly long) | Slower and uses more tokens |
+| `deepseek-r1:14b` | Medium (Professional, too verbose) | Much slower, high token usage |
+| `openthinker:7b` | Low (Excessive pre-processing) | Slow and inefficient |
+| `o639/Dolphin3.0-Mistral-24B-Q6_K_L` | Low (Verbose, unclear) | Much slower |
+| `deepseek-r1:32b` | Low (Overly verbose, redundant) | Extremely slow |
+| `openthinker:32b` | Very Low (Excessive `<think>` output) | Worst efficiency |
+
+### **Observations**
+- **ChatGPT's responses were generally more balanced in clarity, structure, and brevity.**  
+- **Some models (e.g., `deepseek-r1:32b`, `openthinker:32b`) included unnecessary "thought processing" before output, making them inefficient.**  
+- **The most ChatGPT-like models were `dolphin3:latest`, `gemma2:latest`, and `qwen2.5:14b`.**  
+
+---
+
+## **5. Conclusion & Recommendations**
+
+### **Best Models for Business Use**
+- ✅ **`dolphin3:latest`, `gemma2:latest`, `qwen2.5-coder:latest`**: Best balance of **speed, token efficiency, and clarity**  
+- ✅ **`qwen2.5:14b`, `llama3.1:8b`**: Slightly slower but still **highly effective**  
+
+### **Models to Avoid for Business Use**
+- ❌ **`openthinker:32b`, `deepseek-r1:32b`**: **Too slow and inefficient** for practical use  
+- ❌ **`deepseek-r1:14b`, `o639/Dolphin3.0-Mistral-24B-Q6_K_L`**: **Unnecessarily verbose, redundant processing**  
+
+### **Final Verdict**
+For **enterprise email rewriting and professional communications**, **`dolphin3:latest` and `gemma2:latest`** provide **ChatGPT-like performance** while being **efficient, structured, and fast**. 🚀

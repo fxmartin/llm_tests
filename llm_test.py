@@ -208,6 +208,7 @@ if __name__ == "__main__":
     # Start of tests
     for testcase, prompts in TestCases.testcases.items():
             start_time = time.time()
+            clipboard = header
             clipboard += "\n" + colorPrint("## Test case: " + testcase + "\n")
             for prompt in prompts:
                 clipboard += "\n" + colorPrint("- Prompt: " + prompt+ "\n")
