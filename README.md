@@ -20,6 +20,22 @@ The primary goal of this experiment is to assess the performance, accuracy, and 
 - `.env` – Configuration file for specifying model parameters and test cases.
 - For each test case, we provide a structured set of results stored in the **results/** directory. This includes a markdown file containing the collected outputs from the locally hosted LLM, along with key performance metrics such as response time, CPU/GPU utilization, and memory consumption. Additionally, we document the exact prompt submitted to OpenAI’s ChatGPT-4o, along with the locally generated response, to ensure consistency in analysis. Finally, the directory contains the analysis provided by ChatGPT-4o, offering insights into the accuracy, coherence, and overall quality of the local model’s responses in comparison to cloud-based alternatives. This structured approach facilitates a detailed evaluation of local LLM capabilities and helps identify strengths, weaknesses, and potential optimization strategies.
 
+### Results
+**1. Test case 1 - Easy question**
+
+[Test case 1 - Easy question_Analysis_by_ChatGPT_4o][results/Test case 1 - Easy question_Analysis_by_ChatGPT_4o.md]
+
+Test case 1 - Easy question_prompt_for_ChatGPT_4o.md
+Test case 1 - Easy question_results.md
+Test case 2 - Simple rewrite_analysis_by_ChatGPT_4o.md
+Test case 2 - Simple rewrite_prompt_for_ChatGPT_4o.md
+Test case 2 - Simple rewrite_results.md
+Test case 3 - Slightly more complex rewrite_analysis_by_ChatGPT_4o.md
+Test case 3 - Slightly more complex rewrite_prompt_for_ChatGPT_4o.md
+Test case 3 - Slightly more complex rewrite_results.md
+Test case 4 - Document summarising_analysis_by_ChatGPT_4o.md
+Test case 4 - Document summarising_prompt_for_ChatGPT_4o.md
+Test case 4 - Document summarising_results.md
 ## Getting Started
 
 ### Prerequisites
