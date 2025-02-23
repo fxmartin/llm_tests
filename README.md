@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This repository contains a set of Python scripts designed to test locally hosted large language models (LLMs) using [Ollama](https://ollama.com/). The experiment was conducted on a laptop as part of an exploration into the feasibility of running LLMs locally, their capabilities, and their limitations compared to cloud-based models like ChatGPT.
+This repository contains a set of Python scripts designed to test locally hosted large language models (LLMs) using Ollama. The experiment was conducted on a MacBook Pro M3 Max with 48 GB of RAM as part of an exploration into the feasibility of running LLMs locally, their capabilities, and their limitations compared to cloud-based models like ChatGPT.
 
 ## Objective
 
