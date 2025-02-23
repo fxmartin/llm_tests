@@ -71,7 +71,7 @@ class Analysis:
 	    4. Comparison with ChatGPT - Evaluation of each model's response quality relative to ChatGPT.
 	    5. Conclusion - Recommendations on which models to use based on performance and use case suitability.
 
-    Format your answer in mark down format.
+    Format your answer in mark down format ready to copy/paste into a GitHub readme file.
     """
 
     def prompt(self, results: str):

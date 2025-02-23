@@ -54,7 +54,7 @@ class TestCases:
         "Test case 1 - Easy question": [
             "What is the capital of France?"
         ],
-        "Test case 2 - Simple rewrite:": [
+        "Test case 2 - Simple rewrite": [
             """
             Rewrite the following message into a professional and well-structured email
             suitable for communication with C-level executives or senior leadership.
