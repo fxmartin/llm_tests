@@ -23,10 +23,9 @@ The primary goal of this experiment is to assess the performance, accuracy, and 
 ### Results
 **1. Test case 1 - Easy question**
 
-[Test case 1 - Easy question_Analysis_by_ChatGPT_4o][results/Test case 1 - Easy question_Analysis_by_ChatGPT_4o.md]
-
-Test case 1 - Easy question_prompt_for_ChatGPT_4o.md
-Test case 1 - Easy question_results.md
+[Test case 1 - Easy question_Analysis_by_ChatGPT_4o](results/Test case 1 - Easy question_Analysis_by_ChatGPT_4o.md)
+[Test case 1 - Easy question_prompt_for_ChatGPT_4o](Test case 1 - Easy question_prompt_for_ChatGPT_4o.md)
+[Test case 1 - Easy question_results](Test case 1 - Easy question_results.md)
 Test case 2 - Simple rewrite_analysis_by_ChatGPT_4o.md
 Test case 2 - Simple rewrite_prompt_for_ChatGPT_4o.md
 Test case 2 - Simple rewrite_results.md
