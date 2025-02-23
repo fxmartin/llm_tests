@@ -187,7 +187,7 @@ def write_to_file(file_path, content):
         print(f"An unexpected error occurred while writing to file '{file_path}': {str(e)}")
 
 if __name__ == "__main__":
-    start_time = time.time()
+    
     # Instanciate the ColoramaWrapper class
     display = ColoramaWrapper()
     clipboard = ""
@@ -203,8 +203,11 @@ if __name__ == "__main__":
     clipboard += "\n" + colorPrint("The consolidated results will then be submitted to OpenAI ChatGPT 4o for analysis and comparison.")
     clipboard += "\n" + colorPrint("")
     
+    header = clipboard
+
     # Start of tests
     for testcase, prompts in TestCases.testcases.items():
+            start_time = time.time()
             clipboard += "\n" + colorPrint("## Test case: " + testcase + "\n")
             for prompt in prompts:
                 clipboard += "\n" + colorPrint("- Prompt: " + prompt+ "\n")
@@ -222,21 +225,17 @@ if __name__ == "__main__":
                     clipboard += "\n" + colorPrint("\t- Duration: " + str(response[1])+" s")
                     clipboard += "\n" + colorPrint("\t- Number of tokens: " + str(response[2]) + "\n")
 
-    # Instanciation of ChatGPT class
-    chatgpt = Analysis()
+            # Instanciation of ChatGPT class
+            chatgpt = Analysis()
 
-    results = chatgpt.prompt(clipboard)
+            results = chatgpt.prompt(clipboard)
 
-    end_time = time.time()
-    elapsed_time = end_time - start_time
-    clipboard += "\n\n" + colorPrint("Total time taken for executing these tests on a Macbook M3 Max with 48 Gb of RAM: " + str(round(elapsed_time,0)) + " seconds.\n")
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+            clipboard += "\n\n" + colorPrint("Total time taken for executing these tests on a Macbook M3 Max with 48 Gb of RAM: " + str(round(elapsed_time,0)) + " seconds.\n")
     
-    # Copy the results to the clipboard and write the a file
-    pyperclip.copy(clipboard)
-    write_to_file('./results/tests_results.md', clipboard)
-
-    input("Press Enter to continue...")
+            # Write the results to file
+            write_to_file('./results/' + testcase + '_results.md', clipboard)
     
-    # Copy the prompt & results to the clipboard and write the a file
-    pyperclip.copy(results)
-    write_to_file('./results/prompt_for_ChatGPT_4o.md', results)
+            # Write the results and ChatGPT prompt to file
+            write_to_file('./results/' + testcase + '_prompt_for_ChatGPT_4o.md', results)

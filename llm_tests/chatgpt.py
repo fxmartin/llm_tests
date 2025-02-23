@@ -33,7 +33,7 @@ class Analysis:
     ChatGPT_Start_Prompt = """
     # Prompt: Comparative Analysis of Local LLM Performance (vs. ChatGPT)
     ## Objective:
-        Analyze the performance of 15 different locally run LLMs based on response time (duration), token usage,
+        Analyze the performance of different locally run LLMs based on response time (duration), token usage,
         and overall efficiency. Additionally, compare each test case result with ChatGPT's responses to evaluate
         differences in quality, coherence, and efficiency.
         When analyzing response quality, do not consider any text enclosed within <think></think> tags.
@@ -70,6 +70,8 @@ class Analysis:
 	    3. Structured Array - A table format with LLM performance metrics.
 	    4. Comparison with ChatGPT - Evaluation of each model's response quality relative to ChatGPT.
 	    5. Conclusion - Recommendations on which models to use based on performance and use case suitability.
+
+    Format your answer in mark down format.
     """
 
     def prompt(self, results: str):
